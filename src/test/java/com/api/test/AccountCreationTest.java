@@ -29,6 +29,6 @@ public class AccountCreationTest {
 //        System.out.println(response.asPrettyString());
 //
 //        Assert.assertEquals(response.getStatusCode(), 200);
-        System.out.println("Test");
+        System.out.println("Testing");
     }
 }
