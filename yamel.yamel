@@ -1,0 +1,59 @@
+
+name: API Test Automation
+
+on:
+
+  push:
+    branches:
+      - main
+      - master
+
+  pull_request:
+    branches:
+      - main
+      - master
+
+  schedule:
+    - cron: '0 2 * * *'
+    - cron: '0 14 * * 1,4'
+
+  workflow_dispatch:
+
+jobs:
+
+  test:
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Verify Java and Maven
+        run: |
+          java -version
+          mvn -version
+
+      - name: Run API Tests
+        run: mvn clean test -Dsuite=suite
+
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: API-Test-Reports
+          path: |
+            test-output/
+            target/surefire-reports/
+            logs/
